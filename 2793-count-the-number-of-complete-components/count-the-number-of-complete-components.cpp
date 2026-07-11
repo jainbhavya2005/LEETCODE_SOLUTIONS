@@ -1,6 +1,5 @@
 class Solution {
-    bool dfs(int node, vector<vector<int>>& adj, vector<int>& vis,
-             vector<int>& v) {
+   void  dfs(int node, vector<vector<int>>& adj, vector<int>& vis,vector<int>& v) {
         vis[node] = 1;
         v.push_back(node);
         for (int it : adj[node]) {
@@ -8,12 +7,6 @@ class Solution {
                 dfs(it, adj, vis, v);
             }
         }
-        for (int i = 0; i < v.size(); i++) {
-            if (adj[v[i]].size() != v.size() - 1) {
-                return false;
-            }
-        }
-        return true;
     }
 
 public:
@@ -26,13 +19,23 @@ public:
         }
         int count = 0;
 
-        for (int i = 0; i < n; i++) {
+       for (int i = 0; i < n; i++) {
             if (!vis[i]) {
-                vector<int> v;
-                if (dfs(i, adj, vis, v) == true) {
-                    count++;
+                vector<int> component;
+                dfs(i, adj, vis, component);
+                bool complete = true;
+                int sz = component.size();
+                for (int node : component) {
+                    if (adj[node].size() != sz - 1) {
+                        complete = false;
+                        break;
+                    }
                 }
-            }}
+
+                if (complete)
+                    count++;
+            }
+        }
 
             return count;
         }
